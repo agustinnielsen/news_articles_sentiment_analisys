@@ -1,3 +1,5 @@
+# Importamos librerías
+## Importamos Groq para acceder a SLMs mediante APIs, la elección sigue criterios económicos al tener límites gratuitos altos.
 import pandas as pd
 from groq import Groq
 import json
