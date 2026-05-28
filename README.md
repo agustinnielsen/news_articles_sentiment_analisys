@@ -2,7 +2,7 @@
 
 This repository contains a modular Python-based pipeline designed to automate the extraction of web news articles, sentence-level linguistic segmentation, and subsequent valence analysis using Large Language Models (LLMs) via the Groq API.
 
-Developed through the lens of Computational Social Sciences, this toolkit provides a structured method for analyzing compleax digital media discourses regarding technology within academic research contexts.
+Developed through the lens of Computational Social Sciences, this toolkit provides a structured method for analyzing complex digital media discourses regarding technology within academic research contexts.
 
 ## Institutional Framework & Project Info
 
@@ -38,7 +38,7 @@ oraciones_para_clasificar.csv ◄── 2. Segmenter (NLTK) ◄─────�
 
 ### 1. Clone the Repository and Install Dependencies
 ```bash
-git clone https://github.com/agustinnielsen/news_scraping_segmenter_valence_analsys.git
+git clone https://github.com/agustinnielsen/news_scraping_segmenter_valence_analisys.git
 cd news_scraping_segmenter_valence_analisys
 pip install -r requirements.txt
 ```
