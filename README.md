@@ -39,7 +39,7 @@ oraciones_para_clasificar.csv ◄── 2. Segmenter (NLTK) ◄─────�
 ### 1. Clone the Repository and Install Dependencies
 ```bash
 git clone https://github.com/agustinnielsen/news_scraping_segmenter_valence_analsys.git
-cd news_scraping_segmenter_valence_analsys
+cd news_scraping_segmenter_valence_analisys
 pip install -r requirements.txt
 ```
 
@@ -59,7 +59,7 @@ On Linux / macOS:
 export GROQ_API_KEY="your_api_key_here"
 ```
 On Windows (Command Prompt):
-```bash
+```cmd
 set GROQ_API_KEY="your_api_key_here"
 ```
 ## Data Schema Definitions
