@@ -8,13 +8,10 @@ import os
 from tqdm import tqdm
 
 # CONFIGURACIÓN
-client = Groq(api_key="") # Completar API personal desde https://console.groq.com/keys . Esto puede ser reemplazado por el LLM de esu conveniencia.
+client = Groq(api_key=os.environ.get("GROQ_API_KEY")) # Completar API personal desde https://console.groq.com/keys . Esto puede ser reemplazado por el LLM de esu conveniencia.
 MODEL_ID = "llama-3.1-8b-instant"
 ARCHIVO_IN = "oraciones_para_clasificar.csv"
 ARCHIVO_OUT = "analisis_valencia_final.csv"
-
-# LIMPIEZA
-BASURA = ['newsletter', 'suscribite', 'seguinos en', 'clarín', 'la nación', 'infobae', 'leer más', 'registrate']
 
 # Definimos prompt base según el caso.
 ## Se da contexto al modelo en búsqueda de refinar el resultado, se otorgan las categorías posibles y se pide un score de confianza.
@@ -48,7 +45,6 @@ def clasificar_con_groq(bloque_oraciones):
 def ejecutar():
     df = pd.read_csv(ARCHIVO_IN, sep=';', encoding='utf-8-sig')
 
-    # Lógica de reanudación en caso de interrupción
     if os.path.exists(ARCHIVO_OUT):
         df_ya_hecho = pd.read_csv(ARCHIVO_OUT, sep=';')
         ultimo_indice = len(df_ya_hecho)
@@ -59,10 +55,11 @@ def ejecutar():
         ultimo_indice = 0
 
     tamaño_batch = 20
+    
     for i in tqdm(range(ultimo_indice, len(df), tamaño_batch)):
-        batch = df['texto_oracion'].iloc[i:i + tamaño_batch].tolist()
+        batch_df = df.iloc[i:i + tamaño_batch]
+        batch = batch_df['texto_oracion'].tolist()
 
-        # Limpieza rápida
         res_bloque = clasificar_con_groq(batch)
 
         if res_bloque == "REINTENTAR":
@@ -70,12 +67,15 @@ def ejecutar():
             continue
 
         if res_bloque:
-            for idx, r in enumerate(res_bloque):
-                if idx < len(batch):
-                    r['url_origen'] = df.iloc[i + idx]['url_origen']
-                    r['texto_original'] = df.iloc[i + idx]['texto_oracion']
-                    resultados.append(r)
-
+            for r in res_bloque:
+                try:
+                    llm_id = int(r.get('id'))
+                    if 0 <= llm_id < len(batch):
+                        r['url_origen'] = batch_df.iloc[llm_id]['url_origen']
+                        r['texto_original'] = batch_df.iloc[llm_id]['texto_oracion']
+                        resultados.append(r)
+                except (ValueError, TypeError, IndexError):
+                    continue
             # Guardado
             pd.DataFrame(resultados).to_csv(ARCHIVO_OUT, index=False, sep=';', encoding='utf-8-sig')
 
