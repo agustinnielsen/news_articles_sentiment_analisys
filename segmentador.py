@@ -2,8 +2,13 @@ import pandas as pd
 import nltk
 import os
 
-nltk.download('punkt')
-nltk.download('punkt_tab')
+try:
+    nltk.data.find('tokenizers/punkt')
+    nltk.data.find('tokenizers/punkt_tab')
+except LookupError:
+    nltk.download('punkt')
+    nltk.download('punkt_tab')
+
 # Definimos función segmentadora.
 def procesar_csv_a_oraciones(archivo_entrada, archivo_salida):
     if not os.path.exists(archivo_entrada):
