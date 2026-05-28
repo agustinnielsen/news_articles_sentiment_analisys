@@ -1,0 +1,5 @@
+pandas
+trafilatura
+nltk
+groq
+tqdm
